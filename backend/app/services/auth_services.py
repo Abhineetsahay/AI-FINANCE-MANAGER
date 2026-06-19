@@ -1,7 +1,5 @@
 from sqlalchemy.orm import Session
-
 from app.models.user import User
-
 from app.core.security import hash_password, verify_password, create_access_token
 
 
@@ -37,7 +35,6 @@ class AuthService:
 
         if not user:
             raise ValueError("Invalid credentials")
-        print(user)
         if not verify_password(password, str(user.password)):
             raise ValueError("Invalid credentials")
 
