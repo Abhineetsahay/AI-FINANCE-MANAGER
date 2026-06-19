@@ -32,3 +32,8 @@ app.include_router(budget_router)
 app.include_router(goal_router)
 app.include_router(dashboard_router)
 app.include_router(chat_router)
+
+
+@app.get("/")
+def root():
+    return {"message": "API is running"}
