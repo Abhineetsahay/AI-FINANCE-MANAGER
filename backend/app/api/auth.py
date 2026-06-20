@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.schemas.auth import RegisterRequest, TokenResponse, UserResponse
+from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserResponse
 from app.services.auth_services import AuthService
 from app.dependencies.auth import get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
@@ -32,13 +32,11 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
-):
+def login(form_data: LoginRequest, db: Session = Depends(get_db)):
     try:
         token = AuthService.login(
             db=db,
-            email=form_data.username,
+            email=form_data.email,
             password=form_data.password,
         )
 
