@@ -1,28 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { Send, Trash2, Bot, User } from "lucide-react";
-
 import { sendMessage, getChatHistory, clearChatHistory } from "@/services/chat";
 
 import { Button } from "@/components/ui/button";
-
 import { Card } from "@/components/ui/card";
-
 import { Textarea } from "@/components/ui/textarea";
 
 interface Message {
   role: "user" | "assistant";
-  content: string;
+  message: string;
 }
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
-
   const [question, setQuestion] = useState("");
-
   const [loading, setLoading] = useState(false);
+
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const loadHistory = async () => {
     try {
@@ -37,6 +43,7 @@ export default function ChatPage() {
       console.error(error);
     }
   };
+
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       void loadHistory();
@@ -48,9 +55,9 @@ export default function ChatPage() {
   const handleSend = async () => {
     if (!question.trim()) return;
 
-    const userMessage = {
-      role: "user" as const,
-      content: question,
+    const userMessage: Message = {
+      role: "user",
+      message: question,
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -67,10 +74,7 @@ export default function ChatPage() {
         ...prev,
         {
           role: "assistant",
-          content:
-            typeof response === "string"
-              ? response
-              : response.answer || JSON.stringify(response),
+          message: response.response,
         },
       ]);
     } catch (error) {
@@ -83,7 +87,6 @@ export default function ChatPage() {
   const handleClear = async () => {
     try {
       await clearChatHistory();
-
       setMessages([]);
     } catch (error) {
       console.error(error);
@@ -106,55 +109,62 @@ export default function ChatPage() {
         </Button>
       </div>
 
-      {/* Chat Area */}
+      {/* Chat Container */}
       <Card className="flex flex-1 flex-col border-slate-800 bg-[#111C3D]">
-        <div className="flex-1 space-y-4 overflow-y-auto p-6">
-          {messages.length === 0 && (
-            <div className="flex h-full items-center justify-center">
-              <p className="text-slate-500">
-                Ask anything about your finances...
-              </p>
-            </div>
-          )}
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="space-y-4">
+            {messages.length === 0 && (
+              <div className="flex h-125 items-center justify-center">
+                <p className="text-slate-500">
+                  Ask anything about your finances...
+                </p>
+              </div>
+            )}
 
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex ${
-                message.role === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
+            {messages.map((message, index) => (
               <div
-                className={`max-w-[70%] rounded-2xl p-4 ${
-                  message.role === "user"
-                    ? "bg-[#2E62FF] text-white"
-                    : "bg-slate-800 text-slate-100"
+                key={index}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                <div className="mb-2 flex items-center gap-2">
-                  {message.role === "user" ? (
-                    <User className="h-4 w-4" />
-                  ) : (
-                    <Bot className="h-4 w-4 text-[#10B981]" />
-                  )}
+                <div
+                  className={`max-w-[75%] rounded-2xl p-4 ${
+                    message.role === "user"
+                      ? "bg-[#2E62FF] text-white"
+                      : "bg-slate-800 text-slate-100"
+                  }`}
+                >
+                  <div className="mb-2 flex items-center gap-2">
+                    {message.role === "user" ? (
+                      <User className="h-4 w-4" />
+                    ) : (
+                      <Bot className="h-4 w-4 text-[#10B981]" />
+                    )}
 
-                  <span className="text-xs font-medium">
-                    {message.role === "user" ? "You" : "AI Assistant"}
-                  </span>
+                    <span className="text-xs font-medium">
+                      {message.role === "user" ? "You" : "AI Assistant"}
+                    </span>
+                  </div>
+
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {message.message}
+                  </p>
                 </div>
-
-                <p className="whitespace-pre-wrap text-sm">{message.content}</p>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {loading && (
-            <div className="flex justify-start">
-              <div className="rounded-xl bg-slate-800 p-4 text-slate-400">
-                Thinking...
+            {loading && (
+              <div className="flex justify-start">
+                <div className="rounded-xl bg-slate-800 p-4 text-slate-400">
+                  Thinking...
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
         {/* Input */}
@@ -164,7 +174,13 @@ export default function ChatPage() {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Ask about spending, budgets, savings..."
-              className="min-h-[60px] border-slate-700 bg-slate-900 text-white"
+              className="min-h-15 border-slate-700 bg-slate-900 text-white"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  void handleSend();
+                }
+              }}
             />
 
             <Button

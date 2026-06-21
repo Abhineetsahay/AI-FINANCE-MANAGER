@@ -38,7 +38,6 @@ export default function DashboardPage() {
 
             <h2 className="mt-2 text-3xl font-bold text-white">
               ₹{overview.savings}
-              {/* {overview.} */}
             </h2>
           </CardContent>
         </Card>

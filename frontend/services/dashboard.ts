@@ -33,8 +33,7 @@ export interface Insight {
 
 export const getOverview = async () => {
     const res = await api.get("/dashboard/summary");
-    console.log(res);
-    
+
     return res.data;
 };
 
