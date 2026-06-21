@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Lock, Mail } from "lucide-react";
 
 import { loginUser } from "@/services/auth";
@@ -10,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,7 +27,7 @@ export function LoginForm() {
         password,
       });
 
-      // router.push("/dashboard");
+      router.push("/dashboard");
     } catch (err) {
       console.error(err);
     } finally {

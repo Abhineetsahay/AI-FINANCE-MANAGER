@@ -32,10 +32,19 @@ class DashboardService:
         else:
             monthly_income = float(getattr(user, "user_income", 0) or 0)
 
+        monthly_expense = float(monthly_expense)
+        savings = monthly_income - monthly_expense
+
+        savings_rate = (
+            round((savings / monthly_income) * 100, 2) if monthly_income > 0 else 0
+        )
+        print(savings_rate)
+
         return {
             "monthly_income": monthly_income,
-            "monthly_expense": float(monthly_expense),
-            "savings": monthly_income - float(monthly_expense),
+            "monthly_expense": monthly_expense,
+            "savings": savings,
+            "savings_rate": savings_rate,
         }
 
     @staticmethod

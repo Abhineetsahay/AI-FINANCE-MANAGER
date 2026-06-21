@@ -5,6 +5,7 @@ class DashboardSummaryResponse(BaseModel):
     monthly_income: float
     monthly_expense: float
     savings: float
+    savings_rate: float
 
 
 class CategoryBreakdownResponse(BaseModel):

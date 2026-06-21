@@ -24,7 +24,7 @@ router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 def dashboard_summary(
     db: Session = Depends(get_db), current_user=Depends(get_current_user)
 ):
-
+    print("helllll")
     return DashboardService.get_summary(db, current_user.id)
 
 
