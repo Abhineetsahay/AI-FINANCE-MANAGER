@@ -23,7 +23,7 @@ interface Expense {
   amount: number;
   category: string;
   description: string;
-  date: string;
+  expense_date: string;
 }
 
 export default function ExpensesPage() {
@@ -37,7 +37,7 @@ export default function ExpensesPage() {
     const loadExpenses = async () => {
       try {
         const data = await getExpenses();
-
+        
         setExpenses(data);
       } catch (error) {
         console.error(error);
@@ -214,7 +214,7 @@ export default function ExpensesPage() {
               <tbody>
                 {filteredExpenses.map((expense) => (
                   <tr key={expense.id} className="border-b border-slate-800">
-                    <td className="py-4 text-slate-300">{expense.date}</td>
+                    <td className="py-4 text-slate-300">{expense.expense_date}</td>
 
                     <td className="py-4 text-white">{expense.description}</td>
 

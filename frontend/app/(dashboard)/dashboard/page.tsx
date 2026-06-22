@@ -100,50 +100,66 @@ export default function DashboardPage() {
           </CardHeader>
 
           {hasBudgetSummary ? (
-            <CardContent className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-3">
-                <div>
-                  <p className="text-sm text-slate-400">Allocated</p>
+            budgetSummary.map((summary) => {
+              const utilizationPercentage =
+                summary.budget > 0
+                  ? ((summary.budget - summary.remaining) / summary.budget) *
+                    100
+                  : 0;
 
-                  <p className="mt-2 text-2xl font-bold text-white">
-                    ₹{budgetSummary.total_allocated}
-                  </p>
-                </div>
+              return (
+                <CardContent key={summary.category} className="space-y-6">
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <div>
+                      <p className="text-sm text-slate-400">Category</p>
 
-                <div>
-                  <p className="text-sm text-slate-400">Spent</p>
+                      <p className="mt-2 text-2xl font-bold text-white">
+                        {summary.category}
+                      </p>
+                    </div>
 
-                  <p className="mt-2 text-2xl font-bold text-red-400">
-                    ₹{budgetSummary.total_spent}
-                  </p>
-                </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Budget</p>
 
-                <div>
-                  <p className="text-sm text-slate-400">Remaining</p>
+                      <p className="mt-2 text-2xl font-bold text-white">
+                        ₹{summary.budget}
+                      </p>
+                    </div>
 
-                  <p className="mt-2 text-2xl font-bold text-[#10B981]">
-                    ₹{budgetSummary.remaining}
-                  </p>
-                </div>
-              </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Remaining</p>
 
-              <div>
-                <div className="mb-2 flex justify-between text-sm text-slate-400">
-                  <span>Budget Utilization</span>
+                      <p className="mt-2 text-2xl font-bold text-[#10B981]">
+                        ₹{summary.remaining}
+                      </p>
+                    </div>
+                  </div>
 
-                  <span>{budgetSummary.budget_utilization}%</span>
-                </div>
+                  <div>
+                    <div className="mb-2 flex justify-between text-sm text-slate-400">
+                      <span>Budget Utilization</span>
 
-                <div className="h-3 rounded-full bg-slate-800">
-                  <div
-                    className="h-full rounded-full bg-[#2E62FF]"
-                    style={{
-                      width: `${budgetSummary.budget_utilization}%`,
-                    }}
-                  />
-                </div>
-              </div>
-            </CardContent>
+                      <span>{utilizationPercentage.toFixed(0)}%</span>
+                    </div>
+
+                    <div className="h-3 rounded-full bg-slate-800 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          utilizationPercentage >= 90
+                            ? "bg-red-500"
+                            : utilizationPercentage >= 70
+                              ? "bg-yellow-500"
+                              : "bg-[#2E62FF]"
+                        }`}
+                        style={{
+                          width: `${Math.min(utilizationPercentage, 100)}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              );
+            })
           ) : (
             <div className="px-6 py-6 text-slate-400">
               No budget allocated till now
@@ -185,7 +201,7 @@ export default function DashboardPage() {
 
                     <td className="py-4 text-red-400">₹{tx.amount}</td>
 
-                    <td className="py-4 text-slate-400">{tx.date}</td>
+                    <td className="py-4 text-slate-400">{tx.expense_date}</td>
                   </tr>
                 ))}
               </tbody>

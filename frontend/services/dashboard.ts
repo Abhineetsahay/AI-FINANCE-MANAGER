@@ -21,7 +21,7 @@ export interface Transaction {
     description: string;
     category: string;
     amount: number;
-    date: string;
+    expense_date: string;
 }
 
 export interface Insight {
@@ -38,7 +38,7 @@ export const getOverview = async () => {
 };
 
 export const getBudgetSummary = async () => {
-    const res = await api.get("/budgets");
+    const res = await api.get("/budgets/status");
     return res.data;
 };
 

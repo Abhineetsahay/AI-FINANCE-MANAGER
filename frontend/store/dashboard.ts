@@ -8,19 +8,19 @@ export interface Overview {
   savings_rate: number;
 }
 export interface BudgetSummary {
-  total_allocated: number;
-  total_spent: number;
+  category: number;
+  budget: number;
+  spent: number;
   remaining: number;
-  budget_utilization: number;
 }
 
 interface DashboardStore {
   overview: Overview | null;
-  budgetSummary: BudgetSummary | null;
+  budgetSummary: BudgetSummary[] | null;
   transactions: Transaction[];
 
   setOverview: (data: Overview | null) => void;
-  setBudgetSummary: (data: BudgetSummary | null) => void;
+  setBudgetSummary: (data: BudgetSummary[] | null) => void;
   setTransactions: (data: Transaction[]) => void;
 }
 
@@ -31,7 +31,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
 
   setOverview: (overview: Overview | null) => set({ overview }),
 
-  setBudgetSummary: (budgetSummary: BudgetSummary | null) => set({ budgetSummary }),
+  setBudgetSummary: (budgetSummary: BudgetSummary[] | null) => set({ budgetSummary }),
 
   setTransactions: (transactions: Transaction[]) => set({ transactions }),
 }));
