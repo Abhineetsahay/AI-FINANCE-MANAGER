@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight, IndianRupee, Lock, Mail, User } from "lucide-react";
+import toast from "react-hot-toast";
 
 import { registerUser } from "@/services/auth";
 
@@ -41,6 +42,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       onSuccess?.();
     } catch (err) {
       console.error(err);
+      toast.error("Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }

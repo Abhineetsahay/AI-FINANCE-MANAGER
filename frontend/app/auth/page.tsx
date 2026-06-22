@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "@/components/auth/login-form";
 import { RegisterForm } from "@/components/auth/register-form";
 
-export default function LoginPage() {
+export default function Page() {
   const [activeTab, setActiveTab] = useState("login");
 
   return (
@@ -87,19 +87,21 @@ export default function LoginPage() {
 
                 <div className="relative overflow-hidden min-h-105">
                   <div
-                    className={`absolute inset-0 transition-all duration-500 ease-out motion-reduce:transition-none ${activeTab === "login"
-                      ? "translate-x-0 opacity-100"
-                      : "pointer-events-none -translate-x-4 opacity-0"
-                      }`}
+                    className={`absolute inset-0 transition-all duration-500 ease-out motion-reduce:transition-none ${
+                      activeTab === "login"
+                        ? "translate-x-0 opacity-100"
+                        : "pointer-events-none -translate-x-4 opacity-0"
+                    }`}
                   >
                     <LoginForm />
                   </div>
 
                   <div
-                    className={`absolute inset-0 transition-all duration-500 ease-out motion-reduce:transition-none ${activeTab === "register"
-                      ? "translate-x-0 opacity-100"
-                      : "pointer-events-none translate-x-4 opacity-0"
-                      }`}
+                    className={`absolute inset-0 transition-all duration-500 ease-out motion-reduce:transition-none ${
+                      activeTab === "register"
+                        ? "translate-x-0 opacity-100"
+                        : "pointer-events-none translate-x-4 opacity-0"
+                    }`}
                   >
                     <RegisterForm onSuccess={() => setActiveTab("login")} />
                   </div>

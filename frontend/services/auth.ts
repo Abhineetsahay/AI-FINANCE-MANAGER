@@ -14,19 +14,23 @@ export interface RegisterPayload {
 }
 
 export const loginUser = async (data: LoginPayload) => {
-    const response = await api.post("/auth/login", data);
+    try {
+        const response = await api.post("/auth/login", data);
 
-    Cookies.set(
-        "access_token",
-        response.data.access_token,
-        {
-            expires: 7, 
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-        }
-    );
+        Cookies.set(
+            "access-token",
+            response.data.access_token,
+            {
+                expires: 7,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+            }
+        );
 
-    return response.data;
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 };
 
 export const registerUser = async (
@@ -41,5 +45,5 @@ export const registerUser = async (
 };
 
 export const logoutUser = () => {
-    Cookies.remove("access_token");
+    Cookies.remove("access-token");
 };

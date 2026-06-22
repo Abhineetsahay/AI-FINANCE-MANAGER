@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Lock, Mail } from "lucide-react";
+import toast from "react-hot-toast";
 
 import { loginUser } from "@/services/auth";
 
@@ -18,18 +19,19 @@ export function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    let resp;
     try {
       setLoading(true);
 
-      await loginUser({
+      resp = await loginUser({
         email,
         password,
       });
 
+      console.log(resp);
       router.push("/dashboard");
     } catch (err) {
-      console.error(err);
+      toast.error("Login failed. Please check your email and password.");
     } finally {
       setLoading(false);
     }
