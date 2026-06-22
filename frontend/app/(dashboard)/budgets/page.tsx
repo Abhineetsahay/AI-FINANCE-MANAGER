@@ -1,17 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-
 import { Wallet, Calendar, Trash2, Plus } from "lucide-react";
-
 import { deleteBudget } from "@/services/budgets";
-
 import AddBudgetDialog from "@/components/budgets/AddBudgetDialog";
-
 import { Card, CardContent } from "@/components/ui/card";
-
 import { Button } from "@/components/ui/button";
-
 import { useBudgetStore } from "@/store/budgetStore";
 
 export default function BudgetsPage() {
