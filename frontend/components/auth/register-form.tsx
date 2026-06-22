@@ -41,7 +41,6 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
       onSuccess?.();
     } catch (err) {
-      console.error(err);
       toast.error("Registration failed. Please try again.");
     } finally {
       setLoading(false);

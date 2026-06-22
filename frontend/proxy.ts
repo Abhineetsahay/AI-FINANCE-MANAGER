@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
     const token = request.cookies.get(
-        "access_token"
+        "access-token"
     )?.value;
     const protectedRoutes = [
         "/dashboard",
@@ -20,7 +20,7 @@ export function proxy(request: NextRequest) {
 
     if (isProtected && !token) {
         return NextResponse.redirect(
-            new URL("/login", request.url)
+            new URL("/auth", request.url)
         );
     }
 

@@ -79,9 +79,27 @@ export default function Page() {
                     </p>
                   </div>
 
-                  <TabsList className="h-12 w-full flex grid-cols-2 rounded-xl border border-(--border) bg-(--background)/70 p-4">
-                    <TabsTrigger value="login">Login</TabsTrigger>
-                    <TabsTrigger value="register">Register</TabsTrigger>
+                  <TabsList className="grid h-12 w-full grid-cols-2 transition-all ">
+                    <TabsTrigger
+                      value="login"
+                      className={`h-full rounded-lg transition-colors ${
+                        activeTab === "login"
+                          ? "bg-(--primary) text-white"
+                          : "bg-transparent text-(--muted)"
+                      }`}
+                    >
+                      Login
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="register"
+                      className={`h-full rounded-lg transition-colors ${
+                        activeTab === "register"
+                          ? "bg-(--secondary) text-white"
+                          : "bg-transparent text-(--muted)"
+                      }`}
+                    >
+                      Register
+                    </TabsTrigger>
                   </TabsList>
                 </div>
 

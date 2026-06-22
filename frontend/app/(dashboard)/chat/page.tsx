@@ -17,7 +17,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [messageLoaded, isMessageLoaded] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToBottom = () => {
@@ -32,6 +32,7 @@ export default function ChatPage() {
 
   const loadHistory = async () => {
     try {
+      isMessageLoaded(false);
       const data = await getChatHistory();
 
       if (Array.isArray(data)) {
@@ -39,6 +40,7 @@ export default function ChatPage() {
       } else {
         setMessages([]);
       }
+      isMessageLoaded(true);
     } catch (error) {
       console.error(error);
     }
@@ -112,10 +114,15 @@ export default function ChatPage() {
       {/* Chat Container */}
       <Card className="flex flex-1 flex-col border-slate-800 bg-[#111C3D]">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 scrollbar-hide scrollbar-hide::-webkit-scrollbar">
           <div className="space-y-4">
-            {messages.length === 0 && (
-              <div className="flex h-125 items-center justify-center">
+            {!messageLoaded && (
+              <div className="flex h-100 items-center justify-center">
+                <p className="text-slate-500">Your message is loading..</p>
+              </div>
+            )}
+            {messages.length === 0 && messageLoaded && (
+              <div className="flex h-100 items-center justify-center">
                 <p className="text-slate-500">
                   Ask anything about your finances...
                 </p>

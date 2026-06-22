@@ -19,17 +19,15 @@ export function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let resp;
     try {
       setLoading(true);
 
-      resp = await loginUser({
+      await loginUser({
         email,
         password,
       });
-
-      console.log(resp);
       router.push("/dashboard");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       toast.error("Login failed. Please check your email and password.");
     } finally {
