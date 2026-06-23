@@ -74,7 +74,7 @@ export default function Page() {
 
                     <p className="max-w-md text-sm leading-6 text-(--muted) sm:text-base">
                       {activeTab === "login"
-                        ? "Sign in to continue."
+                        ? "Login in to continue."
                         : "Create your account to get started."}
                     </p>
                   </div>

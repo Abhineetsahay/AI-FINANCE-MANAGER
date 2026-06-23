@@ -74,7 +74,7 @@ export function LoginForm() {
         disabled={loading}
         className="h-12 w-full rounded-xl bg-(--primary) font-semibold text-(--text) shadow-lg shadow-black/20 hover:opacity-90"
       >
-        {loading ? "Signing In..." : "Sign In"}
+        {loading ? "Login..." : "Login"}
 
         {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
       </Button>

@@ -4,9 +4,11 @@ import { Wallet, TrendingUp, TrendingDown, PiggyBank } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDashboardStore } from "@/store/dashboard";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
+import DashboardChart from "@/components/dashboard/DashboardChart";
 
 export default function DashboardPage() {
-  const { overview, budgetSummary, transactions } = useDashboardStore();
+  const { overview, budgetSummary, transactions, monthlyTrend } =
+    useDashboardStore();
   const hasBudgetSummary =
     budgetSummary !== null && Object.keys(budgetSummary).length > 0;
 
@@ -87,8 +89,15 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <DashboardChart data={monthlyTrend} />
 
-      {/* Middle */}
+        {/* <AIInsights
+          income={overview.monthly_income}
+          expenses={overview.monthly_expense}
+          savingsRate={overview.savings_rate}
+        /> */}
+      </div>
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Budget Summary */}
         <Card className="lg:col-span-2 border-slate-800 bg-[#111C3D]">
