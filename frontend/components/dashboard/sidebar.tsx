@@ -56,7 +56,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Toggle */}
       <button
         onClick={() => setOpen(true)}
         className="fixed top-4 left-4 z-50 rounded-lg bg-[#111C3D] p-2 text-white lg:hidden"
@@ -64,7 +63,6 @@ export default function Sidebar() {
         <Menu size={22} />
       </button>
 
-      {/* Overlay */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -72,7 +70,6 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={cn(
           "fixed left-0 top-0 z-50 flex min-h-screen w-64 flex-col border-r border-slate-800 bg-[#07112B] transition-transform duration-300",

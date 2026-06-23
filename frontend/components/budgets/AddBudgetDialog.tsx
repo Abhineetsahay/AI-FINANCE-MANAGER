@@ -21,11 +21,8 @@ interface Props {
 
 export default function AddBudgetDialog({ onSuccess }: Props) {
   const [category, setCategory] = useState("");
-
   const [monthlyLimit, setMonthlyLimit] = useState("");
-
   const [effectiveFrom, setEffectiveFrom] = useState("");
-
   const [loading, setLoading] = useState(false);
 
   const handleCreate = async () => {
@@ -53,13 +50,13 @@ export default function AddBudgetDialog({ onSuccess }: Props) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="border-slate-800 bg-[#111C3D] text-white">
+      <DialogContent className="border-slate-800 bg-[#111C3D] text-white h-2/6 lg:h-2/5">
         <DialogHeader>
           <DialogTitle>Create Budget</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <div>
+          <div className="flex flex-col gap-2">
             <Label>Category</Label>
 
             <Input
@@ -68,7 +65,7 @@ export default function AddBudgetDialog({ onSuccess }: Props) {
             />
           </div>
 
-          <div>
+          <div className="flex flex-col gap-2">
             <Label>Monthly Limit</Label>
 
             <Input
@@ -78,12 +75,13 @@ export default function AddBudgetDialog({ onSuccess }: Props) {
             />
           </div>
 
-          <div>
+          <div className="flex flex-col gap-2">
             <Label>Effective From</Label>
 
             <Input
               type="date"
               value={effectiveFrom}
+              min={new Date().toISOString().split("T")[0]}
               onChange={(e) => setEffectiveFrom(e.target.value)}
             />
           </div>
