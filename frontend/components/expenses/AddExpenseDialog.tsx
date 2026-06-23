@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { createExpense } from "@/services/expenses";
+import toast from "react-hot-toast";
 
 interface Props {
   onSuccess?: () => void;
@@ -37,7 +38,7 @@ export default function AddExpenseDialog({ onSuccess }: Props) {
         amount: Number(amount),
         category,
         description,
-        expense_date:expenseDate,
+        expense_date: expenseDate,
       });
 
       setAmount("");
@@ -45,12 +46,28 @@ export default function AddExpenseDialog({ onSuccess }: Props) {
       setDescription("");
       setExpenseDate("");
 
+      toast.success("Expense added successfully", {
+        duration: 3000,
+        style: {
+          background: "#111C3D",
+          color: "#fff",
+          border: "1px solid #10B981",
+        },
+        icon: "✅",
+      });
       setOpen(false);
 
       onSuccess?.();
     } catch (error) {
       console.error(error);
-      alert("Failed to create expense");
+      toast.error("Error while adding expense", {
+        duration: 3000,
+        style: {
+          background: "#111C3D",
+          color: "#fff",
+          border: "1px solid #EF4444",
+        },
+      });
     } finally {
       setLoading(false);
     }
@@ -118,7 +135,19 @@ export default function AddExpenseDialog({ onSuccess }: Props) {
           <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-[#2E62FF]"
+            className="
+    w-full
+    rounded-full
+    border-2
+    border-[#2E62FF]
+    bg-transparent
+    text-white
+    transition-all
+    duration-300
+    hover:border-[#8B5CF6]
+    hover:shadow-[0_0_25px_rgba(139,92,246,0.5)]
+    hover:bg-[#2E62FF]/10   
+  "
           >
             {loading ? "Creating..." : "Create Expense"}
           </Button>

@@ -23,9 +23,8 @@ export default function GoalsPage() {
 
   const totalSaved = goals.reduce((acc, goal) => acc + goal.saved_amount, 0);
 
-  const overallProgress =
-    totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
-
+  let overallProgress = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
+  overallProgress = overallProgress >= 100 ? 100 : overallProgress;
   if (loading) {
     return <GoalsSkeleton />;
   }

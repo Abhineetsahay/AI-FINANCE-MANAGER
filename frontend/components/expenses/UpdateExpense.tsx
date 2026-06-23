@@ -14,6 +14,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
 
 interface EditExpenseDialogProps {
   expense: {
@@ -40,21 +41,43 @@ export default function ExpenseDialog({
   onSave,
 }: EditExpenseDialogProps) {
   const [open, setOpen] = useState(false);
-
+  const [userClick, setUserClick] = useState(false);
   const [amount, setAmount] = useState(expense.amount);
   const [category, setCategory] = useState(expense.category);
   const [description, setDescription] = useState(expense.description);
   const [date, setDate] = useState(expense.expense_date);
 
   const handleSubmit = async () => {
-    await onSave(expense.expense_id, {
-      amount,
-      category,
-      description,
-      date,
-    });
-
-    setOpen(false);
+    try {
+      setUserClick(true);
+      await onSave(expense.expense_id, {
+        amount,
+        category,
+        description,
+        date,
+      });
+      setUserClick(false);
+      setOpen(false);
+      toast.success("Task updated successfully", {
+        duration: 3000,
+        style: {
+          background: "#111C3D",
+          color: "#fff",
+          border: "1px solid #10B981",
+        },
+        icon: "✅",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update Goal", {
+        duration: 3000,
+        style: {
+          background: "#111C3D",
+          color: "#fff",
+          border: "1px solid #EF4444",
+        },
+      });
+    }
   };
 
   return (
@@ -96,8 +119,22 @@ export default function ExpenseDialog({
             onChange={(e) => setDate(e.target.value)}
           />
 
-          <Button className="w-full" onClick={handleSubmit}>
-            Update Expense
+          <Button
+            className=" w-full
+    rounded-full
+    border-2
+    border-[#2E62FF]
+    bg-transparent
+    text-white
+    transition-all
+    duration-300
+    hover:border-[#8B5CF6]
+    hover:shadow-[0_0_25px_rgba(139,92,246,0.5)]
+    hover:bg-[#2E62FF]/10 "
+            onClick={handleSubmit}
+
+          >
+            {userClick ? "Updating the expense" : "Update Expense"}
           </Button>
         </div>
       </DialogContent>

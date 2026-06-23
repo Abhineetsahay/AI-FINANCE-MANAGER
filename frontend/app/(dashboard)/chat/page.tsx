@@ -173,8 +173,6 @@ export default function ChatPage() {
             <div ref={messagesEndRef} />
           </div>
         </div>
-
-        {/* Input */}
         <div className="border-t border-slate-800 p-4">
           <div className="flex gap-3">
             <Textarea
