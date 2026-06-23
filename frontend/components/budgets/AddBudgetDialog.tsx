@@ -13,36 +13,82 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import { createBudget } from "@/services/budgets";
+import toast from "react-hot-toast";
+import { useBudgetStore } from "@/store/budgetStore";
 
 interface Props {
   onSuccess: () => void;
 }
 
 export default function AddBudgetDialog({ onSuccess }: Props) {
+  const [open, setOpen] = useState(false);
   const [category, setCategory] = useState("");
   const [monthlyLimit, setMonthlyLimit] = useState("");
   const [effectiveFrom, setEffectiveFrom] = useState("");
   const [loading, setLoading] = useState(false);
+  const { addBudget } = useBudgetStore();
 
   const handleCreate = async () => {
     try {
+      const limit = Number(monthlyLimit);
+      if (limit <= 0 || !limit) {
+        toast.error("Enter a valid montly_limit", {
+          duration: 3000,
+          style: {
+            background: "#111C3D",
+            color: "#fff",
+            border: "1px solid #EF4444",
+          },
+        });
+        return;
+      }
+      if (category === "") {
+        toast.error("Enter a valid category", {
+          duration: 3000,
+          style: {
+            background: "#111C3D",
+            color: "#fff",
+            border: "1px solid #EF4444",
+          },
+        });
+        return;
+      }
       setLoading(true);
 
-      await createBudget({
+      setOpen(true);
+      await addBudget({
         category,
-        monthly_limit: Number(monthlyLimit),
+        monthly_limit: limit,
         effective_from: effectiveFrom,
       });
-
-      onSuccess();
-    } finally {
+      toast.success("Budget Added successfully", {
+        duration: 3000,
+        style: {
+          background: "#111C3D",
+          color: "#fff",
+          border: "1px solid #10B981",
+        },
+        icon: "✅",
+      });
+      onSuccess?.();
       setLoading(false);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+      setOpen(false);
+      toast.error("Failed to add Goal", {
+        duration: 3000,
+        style: {
+          background: "#111C3D",
+          color: "#fff",
+          border: "1px solid #EF4444",
+        },
+      });
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-linear-to-r from-[#2E62FF] to-[#10B981]">
           <Plus className="mr-2 h-4 w-4" />
@@ -50,7 +96,7 @@ export default function AddBudgetDialog({ onSuccess }: Props) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="border-slate-800 bg-[#111C3D] text-white h-2/6 lg:h-2/5">
+      <DialogContent className="border-slate-800 bg-[#111C3D] text-white">
         <DialogHeader>
           <DialogTitle>Create Budget</DialogTitle>
         </DialogHeader>
@@ -89,7 +135,17 @@ export default function AddBudgetDialog({ onSuccess }: Props) {
           <Button
             onClick={handleCreate}
             disabled={loading}
-            className="w-full bg-[#2E62FF]"
+            className="  w-full
+    rounded-full
+    border-2
+    border-[#2E62FF]
+    bg-transparent
+    text-white
+    transition-all
+    duration-300
+    hover:border-[#8B5CF6]
+    hover:shadow-[0_0_25px_rgba(139,92,246,0.5)]
+    hover:bg-[#2E62FF]/10 "
           >
             {loading ? "Creating..." : "Create Budget"}
           </Button>

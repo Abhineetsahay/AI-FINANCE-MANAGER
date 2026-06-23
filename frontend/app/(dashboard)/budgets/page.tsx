@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { Wallet, Calendar, Trash2, Plus } from "lucide-react";
-import { deleteBudget } from "@/services/budgets";
 import AddBudgetDialog from "@/components/budgets/AddBudgetDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,15 +15,6 @@ export default function BudgetsPage() {
     void loadBudgets();
   }, [loadBudgets]);
 
-  const handleDelete = async (budgetId: number) => {
-    try {
-      await deleteBudget(budgetId);
-
-      removeBudget(budgetId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   if (loading) {
     return <BudgetsSkeleton/>;
@@ -57,7 +47,7 @@ export default function BudgetsPage() {
                 <Button
                   size="icon"
                   variant="ghost"
-                  onClick={() => handleDelete(budget.budget_id)}
+                  onClick={() => removeBudget(budget.budget_id)}
                 >
                   <Trash2 className="h-4 w-4 text-red-400" />
                 </Button>

@@ -31,13 +31,48 @@ export default function AddExpenseDialog({ onSuccess }: Props) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    if (!amount || Number(amount) <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+
+    if (!category.trim()) {
+      toast.error("Category is required");
+      return;
+    }
+
+    if (category.trim().length < 3) {
+      toast.error("Category must be at least 3 characters");
+      return;
+    }
+
+    if (!description.trim()) {
+      toast.error("Description is required");
+      return;
+    }
+
+    if (!expenseDate) {
+      toast.error("Please select an expense date");
+      return;
+    }
+
+    const selectedDate = new Date(expenseDate);
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
+      toast.error("Expense date cannot be in the future");
+      return;
+    }
+
     try {
       setLoading(true);
 
       await createExpense({
         amount: Number(amount),
-        category,
-        description,
+        category: category.trim(),
+        description: description.trim(),
         expense_date: expenseDate,
       });
 
@@ -55,11 +90,13 @@ export default function AddExpenseDialog({ onSuccess }: Props) {
         },
         icon: "✅",
       });
+
       setOpen(false);
 
       onSuccess?.();
     } catch (error) {
       console.error(error);
+
       toast.error("Error while adding expense", {
         duration: 3000,
         style: {
@@ -72,7 +109,6 @@ export default function AddExpenseDialog({ onSuccess }: Props) {
       setLoading(false);
     }
   };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
