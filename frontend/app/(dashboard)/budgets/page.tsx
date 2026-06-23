@@ -7,6 +7,7 @@ import AddBudgetDialog from "@/components/budgets/AddBudgetDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useBudgetStore } from "@/store/budgetStore";
+import BudgetsSkeleton from "@/components/budgets/BudgetsSkeleton";
 
 export default function BudgetsPage() {
   const { budgets, loading, loadBudgets, removeBudget } = useBudgetStore();
@@ -26,7 +27,7 @@ export default function BudgetsPage() {
   };
 
   if (loading) {
-    return <p className="text-slate-400">Loading budgets...</p>;
+    return <BudgetsSkeleton/>;
   }
 
   return (

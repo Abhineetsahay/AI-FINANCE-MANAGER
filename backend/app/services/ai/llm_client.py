@@ -41,7 +41,7 @@ Keep responses practical, concise, and financially accurate.
             {"role": "user", "content": prompt},
         ],
         temperature=0.3,
-        max_tokens=500,
+        max_tokens=1000,
     )
 
     return completion.choices[0].message.content

@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-
 import { Target, Plus, Trash2, CheckCircle2 } from "lucide-react";
-
 import { useGoalStore } from "@/store/useGoalStore";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 import AddGoalDialog from "@/components/goals/AddGoalDialog";
+import UpdateGoalDialog from "@/components/goals/UpdateGoalDialog";
+import GoalsSkeleton from "@/components/goals/GoalsSkeleton";
 
 export default function GoalsPage() {
-  const { goals, loading, fetchGoals, removeGoal } = useGoalStore();
+  const { goals, loading, fetchGoals, updateGoal, removeGoal } = useGoalStore();
 
   useEffect(() => {
     if (goals.length === 0) {
@@ -28,7 +27,7 @@ export default function GoalsPage() {
     totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
 
   if (loading) {
-    return <p className="text-slate-400">Loading goals...</p>;
+    return <GoalsSkeleton />;
   }
 
   return (
@@ -78,7 +77,6 @@ export default function GoalsPage() {
         </CardContent>
       </Card>
 
-      {/* Goals */}
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {goals.map((goal) => {
           const progress =
@@ -98,7 +96,11 @@ export default function GoalsPage() {
                     {goal.is_achieved && (
                       <CheckCircle2 className="h-5 w-5 text-[#10B981]" />
                     )}
-
+                    <UpdateGoalDialog
+                      goalId={goal.goal_id}
+                      currentSaved={goal.saved_amount}
+                      onUpdate={updateGoal}
+                    />
                     <Button
                       size="icon"
                       variant="ghost"

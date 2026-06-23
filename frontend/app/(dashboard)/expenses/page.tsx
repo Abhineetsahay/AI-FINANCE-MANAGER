@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Calendar, Receipt, TrendingDown, Pencil, Trash2 } from "lucide-react";
+import { Calendar, Receipt, TrendingDown, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,38 +14,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { getExpenses, deleteExpense } from "@/services/expenses";
-
-interface Expense {
-  id: number;
-  amount: number;
-  category: string;
-  description: string;
-  expense_date: string;
-}
+import ExpensesSkeleton from "@/components/expenses/ExpensesSkeleton";
+import { useExpenseStore } from "@/store/expenseStore";
+import ExpenseDialog from "@/components/expenses/UpdateExpense";
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { expenses, loading, loadExpenses, updateExpenseItem, removeExpense } =
+    useExpenseStore();
 
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
   useEffect(() => {
-    const loadExpenses = async () => {
-      try {
-        const data = await getExpenses();
-        
-        setExpenses(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadExpenses();
-  }, []);
+    void loadExpenses();
+  }, [loadExpenses]);
 
   const totalExpenses = useMemo(() => {
     return expenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -78,18 +60,8 @@ export default function ExpensesPage() {
     return matchesSearch && matchesCategory;
   });
 
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteExpense(id);
-
-      setExpenses((prev) => prev.filter((expense) => expense.id !== id));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   if (loading) {
-    return <div className="text-slate-400">Loading Expenses...</div>;
+    return <ExpensesSkeleton />;
   }
 
   return (
@@ -176,12 +148,7 @@ export default function ExpensesPage() {
           </Select>
 
           <div className="ml-auto">
-            <AddExpenseDialog
-              onSuccess={async () => {
-                const data = await getExpenses();
-                setExpenses(data);
-              }}
-            />
+            <AddExpenseDialog onSuccess={loadExpenses} />
           </div>
         </CardContent>
       </Card>
@@ -211,8 +178,13 @@ export default function ExpensesPage() {
 
               <tbody>
                 {filteredExpenses.map((expense) => (
-                  <tr key={expense.id} className="border-b border-slate-800">
-                    <td className="py-4 text-slate-300">{expense.expense_date}</td>
+                  <tr
+                    key={expense.expense_id}
+                    className="border-b border-slate-800"
+                  >
+                    <td className="py-4 text-slate-300">
+                      {expense.expense_date}
+                    </td>
 
                     <td className="py-4 text-white">{expense.description}</td>
 
@@ -228,14 +200,15 @@ export default function ExpensesPage() {
 
                     <td className="py-4">
                       <div className="flex gap-2">
-                        <Button size="icon" variant="ghost">
-                          <Pencil className="h-4 w-4" />
-                        </Button>
+                        <ExpenseDialog
+                          expense={expense}
+                          onSave={updateExpenseItem}
+                        />
 
                         <Button
                           size="icon"
                           variant="ghost"
-                          onClick={() => handleDelete(expense.id)}
+                          onClick={() => removeExpense(expense.expense_id)}
                         >
                           <Trash2 className="h-4 w-4 text-red-400" />
                         </Button>

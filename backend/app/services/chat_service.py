@@ -13,9 +13,7 @@ from app.services.ai.llm_client import generate_response
 
 
 class ChatService:
-
     MAX_MESSAGES = 10
-
     @staticmethod
     def ask_question(db: Session, user_id: int, question: str):
 

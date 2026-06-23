@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 
 import api from "@/lib/api";
 import { useRouter } from "next/navigation";
+import SettingsSkeleton from "@/components/settings/SettingsSkeleton";
 
 interface UserProfile {
   id: number;
@@ -17,7 +18,7 @@ interface UserProfile {
 }
 
 export default function SettingsPage() {
-  const router=useRouter();  
+  const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -44,11 +45,7 @@ export default function SettingsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-slate-400">Loading profile...</p>
-      </div>
-    );
+    return <SettingsSkeleton />;
   }
 
   if (!profile) {
@@ -147,7 +144,9 @@ export default function SettingsPage() {
 
       <Card className="border-red-500/20 bg-[#111C3D]">
         <CardContent className="p-6">
-          <h3 className="mb-4 text-lg font-semibold text-red-900">Danger Zone</h3>
+          <h3 className="mb-4 text-lg font-semibold text-red-900">
+            Danger Zone
+          </h3>
 
           <Button onClick={handleLogout} variant="destructive">
             <LogOut className="mr-2 h-4 w-4 text-red-400" />

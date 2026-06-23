@@ -3,6 +3,7 @@
 import { Wallet, TrendingUp, TrendingDown, PiggyBank } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDashboardStore } from "@/store/dashboard";
+import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 
 export default function DashboardPage() {
   const { overview, budgetSummary, transactions } = useDashboardStore();
@@ -10,11 +11,7 @@ export default function DashboardPage() {
     budgetSummary !== null && Object.keys(budgetSummary).length > 0;
 
   if (!overview || !budgetSummary) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-slate-400">Loading Dashboard...</p>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
