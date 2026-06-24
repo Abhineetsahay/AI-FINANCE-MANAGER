@@ -16,6 +16,7 @@ from app.schemas.dashboard import (
 from app.schemas.expenses import ExpenseResponse
 
 from app.services.dashboard_service import DashboardService
+from app.services.insightService import InsightService
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -49,3 +50,15 @@ def recent_expenses(
 ):
 
     return DashboardService.recent_expenses(db, current_user.id)
+
+
+@router.get("/ai-insights")
+def ai_insights(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+
+    return InsightService.get_ai_insights(
+        db=db,
+        user_id=current_user.id,
+    )
