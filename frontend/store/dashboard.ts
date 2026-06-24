@@ -1,4 +1,4 @@
-import { Transaction } from "@/services/dashboard";
+import { AIInsight, Transaction } from "@/services/dashboard";
 import { create } from "zustand";
 
 export interface Overview {
@@ -23,16 +23,19 @@ export interface MonthlyTrend {
   total: number;
 }
 
+
 interface DashboardStore {
   overview: Overview | null;
   budgetSummary: BudgetSummary[] | null;
   transactions: Transaction[];
   monthlyTrend: MonthlyTrend[];
+  aiInsights: AIInsight | null;
 
   setOverview: (data: Overview | null) => void;
   setBudgetSummary: (data: BudgetSummary[] | null) => void;
   setTransactions: (data: Transaction[]) => void;
   setMonthlyTrend: (data: MonthlyTrend[]) => void;
+  setAIInsights: (data: AIInsight | null) => void;
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -40,11 +43,15 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   budgetSummary: null,
   transactions: [],
   monthlyTrend: [],
-  setOverview: (overview: Overview | null) => set({ overview }),
+  aiInsights: null,
 
+  setOverview: (overview: Overview | null) => set({ overview }),
   setBudgetSummary: (budgetSummary: BudgetSummary[] | null) => set({ budgetSummary }),
 
   setTransactions: (transactions: Transaction[]) => set({ transactions }),
   setMonthlyTrend: (monthlyTrend) =>
     set({ monthlyTrend }),
+  
+  setAIInsights: (aiInsights) =>
+    set({ aiInsights }),
 }));

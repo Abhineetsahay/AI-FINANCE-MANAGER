@@ -5,9 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDashboardStore } from "@/store/dashboard";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 import DashboardChart from "@/components/dashboard/DashboardChart";
+import AIInsightsCard from "@/components/dashboard/Ai-InsightCard";
 
 export default function DashboardPage() {
-  const { overview, budgetSummary, transactions, monthlyTrend } =
+  const { overview, budgetSummary, transactions, monthlyTrend,aiInsights } =
     useDashboardStore();
   const hasBudgetSummary =
     budgetSummary !== null && Object.keys(budgetSummary).length > 0;
@@ -92,11 +93,7 @@ export default function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         <DashboardChart data={monthlyTrend} />
 
-        {/* <AIInsights
-          income={overview.monthly_income}
-          expenses={overview.monthly_expense}
-          savingsRate={overview.savings_rate}
-        /> */}
+       <AIInsightsCard data={aiInsights}/>
       </div>
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Budget Summary */}

@@ -34,7 +34,12 @@ export interface MonthlyTrend {
     month: number;
     total: number;
 }
-
+export interface AIInsight {
+    financial_health_score: number;
+    financial_health: string;
+    insights: string[];
+    recommendations: string[];
+}
 
 export const getOverview = async () => {
     const res = await api.get("/dashboard/summary");
@@ -58,5 +63,10 @@ export const getRecentTransactions = async () => {
 export const getMonthlyTrend = async () => {
     const res = await api.get("/dashboard/monthly-trend");
 
+    return res.data;
+};
+
+export const getAIInsights = async () => {
+    const res = await api.get("/dashboard/ai-insights");
     return res.data;
 };

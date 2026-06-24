@@ -7,6 +7,7 @@ import {
   getBudgetSummary,
   getRecentTransactions,
   getMonthlyTrend,
+  getAIInsights,
 } from "@/services/dashboard";
 
 import { useDashboardStore } from "@/store/dashboard";
@@ -24,6 +25,7 @@ export default function DashboardLayout({
     setBudgetSummary,
     setTransactions,
     setMonthlyTrend,
+    setAIInsights,
   } = useDashboardStore();
 
   useEffect(() => {
@@ -31,18 +33,25 @@ export default function DashboardLayout({
       if (overview) return;
 
       try {
-        const [overviewData, budgetData, transactionData, monthlyTrend] =
-          await Promise.all([
-            getOverview(),
-            getBudgetSummary(),
-            getRecentTransactions(),
-            getMonthlyTrend(),
-          ]);
+        const [
+          overviewData,
+          budgetData,
+          transactionData,
+          monthlyTrend,
+          aiInsight,
+        ] = await Promise.all([
+          getOverview(),
+          getBudgetSummary(),
+          getRecentTransactions(),
+          getMonthlyTrend(),
+          getAIInsights(),
+        ]);
 
         setOverview(overviewData);
         setBudgetSummary(budgetData);
         setTransactions(transactionData);
         setMonthlyTrend(monthlyTrend);
+        setAIInsights(aiInsight);
       } catch (err) {
         console.error(err);
       }
@@ -55,6 +64,7 @@ export default function DashboardLayout({
     setOverview,
     setTransactions,
     setMonthlyTrend,
+    setAIInsights
   ]);
 
   return (
